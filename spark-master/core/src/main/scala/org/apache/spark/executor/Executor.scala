@@ -101,6 +101,11 @@ private[spark] class Executor(
   // Use UninterruptibleThread to run tasks so that we can allow running codes without being
   // interrupted by `Thread.interrupt()`. Some issues, such as KAFKA-1894, HADOOP-10622,
   // will hang forever if some methods are interrupted.
+  //启动工作线程池
+  //使用UninterruptibleThread来运行任务，这样我们就可以运行代码
+  //被' Thread.interrupt() '中断。有些问题，比如KAFKA-1894, HADOOP-10622，
+  //将在某些方法被中断时永久挂起。
+  //此处使用线程池的方式和 阿里Java开发手册类似
   private val threadPool = {
     val threadFactory = new ThreadFactoryBuilder()
       .setDaemon(true)
