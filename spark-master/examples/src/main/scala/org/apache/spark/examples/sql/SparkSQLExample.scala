@@ -60,6 +60,7 @@ object SparkSQLExample {
 
     // Displays the content of the DataFrame to stdout
     df.show()
+//    df.withColumns()
     // +----+-------+
     // | age|   name|
     // +----+-------+

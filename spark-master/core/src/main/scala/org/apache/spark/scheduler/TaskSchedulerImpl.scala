@@ -271,6 +271,7 @@ private[spark] class TaskSchedulerImpl(
   }
 
   // Label as private[scheduler] to allow tests to swap in different task set managers if necessary
+  //被submit  task 调用
   private[scheduler] def createTaskSetManager(
       taskSet: TaskSet,
       maxTaskFailures: Int): TaskSetManager = {
@@ -468,6 +469,9 @@ private[spark] class TaskSchedulerImpl(
 
   // Use the resource that the resourceProfile has as the limiting resource to calculate the
   // total number of slots available based on the current offers.
+  //使用resourceProfile拥有的资源作为限制资源来计算
+  //基于当前提供的插槽总数。
+  // 被下面  resourceOffers  调用
   private def calculateAvailableSlots(
       resourceProfileIds: Array[Int],
       availableCpus: Array[Int],
@@ -526,9 +530,10 @@ private[spark] class TaskSchedulerImpl(
   }
 
   /**
-   * Called by cluster manager to offer resources on slaves. We respond by asking our active task
+   * Called by 调用 cluster manager to offer resources on slaves. We respond by asking our active task
    * sets for tasks in order of priority. We fill each node with tasks in a round-robin manner so
    * that tasks are balanced across the cluster.
+    * 调用 calculateAvailableSlots
    */
   def resourceOffers(
       offers: IndexedSeq[WorkerOffer],
@@ -595,7 +600,8 @@ private[spark] class TaskSchedulerImpl(
       } else {
         -1
       }
-      // Skip the barrier taskSet if the available slots are less than the number of pending tasks.
+      // Skip the barrier 障碍物，屏障；界线 taskSet if the available slots are less than
+      // the number of pending  行将发生的 tasks.
       if (taskSet.isBarrier && numBarrierSlotsAvailable < taskSet.numTasks) {
         // Skip the launch process.
         // TODO SPARK-24819 If the job requires more slots than available (both busy and free

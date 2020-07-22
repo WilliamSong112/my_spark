@@ -369,6 +369,11 @@ private[spark] class DAGScheduler(
    * 1. Ancestor RDDs that have different number of partitions from the resulting RDD (eg.
    * union()/coalesce()/first()/take()/PartitionPruningRDD);
    * 2. An RDD that depends on multiple barrier RDDs (eg. barrierRdd1.zip(barrierRdd2)).
+    * 检查以确保我们没有使用不支持的RDD链模式启动barrier阶段。的
+    *不支持下列模式:
+    * 1。与生成的RDD具有不同分区数量的祖先RDDs(例如。
+    *联盟()/合并()/ ()/ ()/ PartitionPruningRDD);
+    * 2。依赖于多个barrier RDDs的RDD(例如。barrierRdd1.zip (barrierRdd2))。
    */
   private def checkBarrierStageWithRDDChainPattern(rdd: RDD[_], numTasksInStage: Int): Unit = {
     if (rdd.isBarrier() &&

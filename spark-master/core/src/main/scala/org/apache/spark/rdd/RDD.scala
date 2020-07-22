@@ -325,6 +325,20 @@ abstract class RDD[T: ClassTag](
    * Internal method to this RDD; will read from cache if applicable, or otherwise compute it.
    * This should ''not'' be called by users directly, but is available for implementors of custom
    * subclasses of RDD.
+    * 这个RDD的内部方法;将从缓存中读取(如果适用的话)，或者计算它。用户不应该直接调用它，但是RDD自定义子类的实现者可以使用它。
+    *
+    * Java  迭代器  案例
+    *  Iterator<Person> iterator = array.iterator();
+
+      while(iterator.hasNext()){
+         String name = iterator.next().getName();
+         System.out.println(name);
+         if(name.equals("Tom3")){
+             //array.remove(name);  不推荐这种方式
+             iterator.remove();
+         }
+      }
+    *
    */
   final def iterator(split: Partition, context: TaskContext): Iterator[T] = {
     if (storageLevel != StorageLevel.NONE) {
@@ -372,6 +386,7 @@ abstract class RDD[T: ClassTag](
 
   /**
    * Gets or computes an RDD partition. Used by RDD.iterator() when an RDD is cached.
+    * 获取或计算一个RDD分区。由RDD.iterator()在缓存RDD时使用。
    */
   private[spark] def getOrCompute(partition: Partition, context: TaskContext): Iterator[T] = {
     val blockId = RDDBlockId(id, partition.index)
